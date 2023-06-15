@@ -1,0 +1,92 @@
+﻿@page "/AddNewEmployee"
+@using EmployeeCrudBlazer.Data
+@inject EmployeeService employeeService
+@inject NavigationManager NavigationManager
+<h3>Add New Employee</h3>
+<hr />
+<EditForm Model="@obj" OnValidSubmit="@CreateNewEmployee">
+    <DataAnnotationsValidator />
+ 
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="FirstName" class="control-label">First Name</label>
+                <input form="FirstName" class="form-control" @bind="@obj.FirstName" />
+                <ValidationMessage For="@(() => obj.FirstName)" />
+            </div>
+            <div class="form-group">
+                <label for="MiddleName" class="control-label">Middle Name</label>
+                <input form="MiddleName" class="form-control" @bind="@obj.MiddleName" />
+                <ValidationMessage For="@(() => obj.MiddleName)" />
+            </div>
+            <div class="form-group">
+                <label for="LastName" class="control-label">Last Name</label>
+                <input form="LastName" class="form-control" @bind="@obj.LastName" />
+                <ValidationMessage For="@(() => obj.LastName)" />
+            </div>
+            <div class="form-group">
+                <label for="EmailAddress" class="control-label">Email Address</label>
+                <input form="EmailAddress" class="form-control" @bind="@obj.EmailAddress" />
+                <ValidationMessage For="@(() => obj.EmailAddress)" />
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber" class="control-label">Phone Number</label>
+                <input form="PhoneNumber" class="form-control" @bind="@obj.PhoneNumber" />
+                <ValidationMessage For="@(() => obj.PhoneNumber)" />
+            </div>
+            <div class="form-group">
+                <label for="PostalCode" class="control-label">Postal Code</label>
+                <input form="PostalCode" class="form-control" @bind="@obj.PostalCode" />
+                <ValidationMessage For="@(() => obj.PostalCode)" />
+            </div>
+            <div class="form-group">
+                <label for="Address" class="control-label">Address</label>
+                <input form="Address" class="form-control" @bind="@obj.Address" />
+                <ValidationMessage For="@(() => obj.Address)" />
+            </div>
+            <div class="form-group">
+                <label for="City" class="control-label">City</label>
+                <input form="City" class="form-control" @bind="@obj.City" />
+                <ValidationMessage For="@(() => obj.City)" />
+            </div>
+            <div class="form-group">
+                <label for="Designation" class="control-label">Designation</label>
+                <input form="Designation" class="form-control" @bind="@obj.Designation" />
+                <ValidationMessage For="@(() => obj.Designation)" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="padding: 1%;">
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Save Employee" />
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    Employee obj = new Employee();
+    EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(obj);
+        base.OnInitialized();
+    }
+
+    protected async void CreateNewEmployee()
+    {
+        if (editContext.Validate())
+        {
+            await employeeService.AddNewEmployee(obj);
+            NavigationManager.NavigateTo("Employees");
+        }
+    }
+
+    protected async void Cancel()
+    {
+        NavigationManager.NavigateTo("Employees");
+    }
+}
